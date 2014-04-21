@@ -1,4 +1,24 @@
 #!/usr/bin/env ruby
 
+require 'open3'
+require 'optparse'
+
 ## FIXME: Replace this code with a pure Ruby clone of the ls utility
-system("ls", *ARGV)
+module RubyLS
+
+  class Application
+
+    def initialize(argv)
+      @directory = argv[0] || Dir.pwd
+      @pattern = argv[1]
+    end
+
+    def run
+      Dir.entries(@directory)
+    end
+
+  end
+
+end
+
+RubyLS::Application.new(ARGV).run
