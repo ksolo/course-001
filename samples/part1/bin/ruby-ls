@@ -3,10 +3,11 @@
 require 'open3'
 require 'optparse'
 
-## FIXME: Replace this code with a pure Ruby clone of the ls utility
 module RubyLS
 
   class Application
+
+    attr_reader :directory
 
     def initialize(argv)
       @directory = argv[0] || Dir.pwd
@@ -14,7 +15,8 @@ module RubyLS
     end
 
     def run
-      Dir.entries(@directory)
+      hidden_file = /^\./
+      puts Dir.entries(directory).select {|dir| dir !~ hidden_file }
     end
 
   end
