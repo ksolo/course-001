@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
 require 'open3'
+require 'pry'
 require 'optparse'
 
 module RubyLS
@@ -10,13 +11,38 @@ module RubyLS
     attr_reader :directory
 
     def initialize(argv)
-      @directory = argv[0] || Dir.pwd
-      @pattern = argv[1]
+      @options, @directory = parse_options(argv)
+      @view = RubyLS::View.new(@options)
     end
 
     def run
-      hidden_file = /^\./
-      puts Dir.entries(directory).select {|dir| dir !~ hidden_file }
+      @view.render(directory)
+    end
+
+    private
+
+    def parse_options(argv)
+      options = {}
+      parser = OptionParser.new
+
+      parser.on("-l") { options[:long_format] = true }
+      parser.on("-a") { options[:include_hidden] = true }
+
+      directory = parser.parse(argv).pop
+
+      [options, directory]
+    end
+
+  end
+
+  class View
+
+    def initialize(options={})
+      @options = options
+    end
+
+    def render(dir)
+      $stdout.puts "woot"
     end
 
   end
